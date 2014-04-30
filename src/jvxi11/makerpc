@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+JRPCGEN=../../external/jrpcgen.jar
+mkdir -p rpc
+java -jar $JRPCGEN -p jvxill.rpc -d ./rpc vxi11core.rpcl 
+java -jar $JRPCGEN -p jvxill.rpc -d ./rpc vxi11intr.rpcl
