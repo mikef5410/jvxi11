@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<project name="jvxi11" default="init">
+
+<!--
+Ant Build file for jvxi11 ... Java VXI-11 interface library
+-->
+
+<project name="jvxi11" default="test">
 
 <path id="compile.classpath">
   <fileset dir="external/"> 
@@ -14,6 +19,12 @@
   <pathelement path="dist/jvxi11.jar" />
 </path>
 
+<!-- The following property is expected to be overridden by caller -->   
+<property name="one-jar.dist.dir" value="./external"/>   
+<property name="one-jar.version" value="0.97"/>
+<property name="one-jar.ant.jar" value="${one-jar.dist.dir}/one-jar-ant-task-${one-jar.version}.jar"/>
+<taskdef name="one-jar" classname="com.simontuffs.onejar.ant.OneJarTask" 
+         classpath="${one-jar.ant.jar}" onerror="report"/>
 
 <target name="init">
   <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask" classpath="external/jrpcgen.jar" />
@@ -52,8 +63,37 @@
 </target>
 
 <target name="test" depends="jar" >
+  <!-- Compile the test code -->
   <javac srcdir="test/testjvxi11/src"  destdir="test/build/classes" includeAntRuntime="no" 
          classpathref="test.compile.classpath" />
+
+  <!-- Make a one-jar runnable of each test -->
+  <one-jar destfile="test/build/test.jar">
+    <manifest>
+      <attribute name="One-Jar-Main-Class" value="testjvxi11.Testjvxi11App" />
+    </manifest>
+    <main>
+      <fileset dir="test/build/classes"  includes="testjvxi11/Testjvxi11App.class" />
+    </main>
+    <lib >
+      <fileset file="external/oncrpc.jar" />
+      <fileset file="dist/jvxi11.jar" />
+    </lib>
+  </one-jar>
+
+  <one-jar destfile="test/build/test2.jar">
+    <manifest>
+      <attribute name="One-Jar-Main-Class" value="testjvxi11.Testjvxi11App2" />
+    </manifest>
+    <main>
+      <fileset dir="test/build/classes"  includes="testjvxi11/Testjvxi11App2.class" />
+    </main>
+    <lib>
+      <fileset file="external/oncrpc.jar" />
+      <fileset file="dist/jvxi11.jar" />
+    </lib>
+  </one-jar>
+
 </target>
 
 
