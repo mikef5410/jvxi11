@@ -21,6 +21,7 @@
   <mkdir dir="test/build/classes" />
   <mkdir dir="dist" />
   <mkdir dir="src/jvxi11/rpc" />
+  <mkdir dir="doc/javadoc" />
   <!--
   <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/"  package="jvxi11.rpc" verbose="yes"/>
   <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/"  package="jvxi11.rpc" verbose="yes"/> 
@@ -39,8 +40,15 @@
   <echo>compilation complete!</echo>
 </target>
 
-<target name="jar" depends="compile">
-  <jar basedir="build/classes" jarfile="dist/jvxi11.jar" />
+<target name="doc" depends="init" >
+  <javadoc sourcepath="src" destdir="doc/javadoc" />
+</target>
+
+<target name="jar" depends="compile,doc">
+  <jar jarfile="dist/jvxi11.jar" >
+    <fileset dir="build/classes" />
+    <fileset dir="doc/" includes="javadoc/**" />
+  </jar>
 </target>
 
 <target name="test" depends="jar" >
@@ -54,6 +62,7 @@
   <delete dir="test/build/classes" />
   <delete dir="src/jvxi11/rpc" />
   <delete dir="dist" />
+  <delete dir="doc/javadoc" />
 </target>
 
 
