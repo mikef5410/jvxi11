@@ -3,23 +3,38 @@
 
 <path id="compile.classpath">
   <fileset dir="external/"> 
-    <include name="*.jar"/>
+    <include name="oncrpc.jar"/>
   </fileset>
 </path>
+
+<path id="test.compile.classpath">
+  <fileset dir="external/"> 
+    <include name="oncrpc.jar"/>
+  </fileset>
+  <pathelement path="dist/jvxi11.jar" />
+</path>
+
 
 <target name="init">
   <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask" classpath="external/jrpcgen.jar" />
   <mkdir dir="build/classes" />
+  <mkdir dir="test/build/classes" />
   <mkdir dir="dist" />
   <mkdir dir="src/jvxi11/rpc" />
-  <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/" createdir="yes" package="jvxi11.rpc" />
-  <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/" createdir="yes" package="jvxi11.rpc" />
-  <echo> "rpc generation complete!"</echo>
+  <!--
+  <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/"  package="jvxi11.rpc" verbose="yes"/>
+  <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/"  package="jvxi11.rpc" verbose="yes"/> 
+  -->
+  <exec executable="/bin/bash" dir="src/jvxi11" >
+    <arg value="./makerpc" />
+  </exec>
+
+  <echo>rpc generation complete!</echo>
 </target>
 
-<target name="compile" depends="init">
-  <javac srcdir="src"  destdir="build/classes" includeAntRuntime="yes" >
-    <classpath refid="compile.classpath" />
+<target name="compile" depends="init" >
+  <javac srcdir="src"  destdir="build/classes" includeAntRuntime="no"  classpathref="compile.classpath">
+    <!-- <classpath refid="compile.classpath" /> -->
   </javac>
   <echo>compilation complete!</echo>
 </target>
@@ -28,6 +43,18 @@
   <jar basedir="build/classes" jarfile="dist/jvxi11.jar" />
 </target>
 
+<target name="test" depends="jar" >
+  <javac srcdir="test/testjvxi11/src"  destdir="test/build/classes" includeAntRuntime="no" 
+         classpathref="test.compile.classpath" />
+</target>
+
+
+<target name="clean" >
+  <delete dir="build/classes" />
+  <delete dir="test/build/classes" />
+  <delete dir="src/jvxi11/rpc" />
+  <delete dir="dist" />
+</target>
 
 
 </project>
