@@ -2,7 +2,7 @@
 <project name="jvxi11" default="init">
 
 <path id="compile.classpath">
-  <fileset dir="external"> 
+  <fileset dir="external/"> 
     <include name="*.jar"/>
   </fileset>
 </path>
@@ -12,13 +12,13 @@
   <mkdir dir="build/classes" />
   <mkdir dir="dist" />
   <mkdir dir="src/jvxi11/rpc" />
-  <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/jvxi11/rpc" createdir="yes" package="jvxi11.rpc" />
-  <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/jvxi11/rpc" createdir="yes" package="jvxi11.rpc" />
+  <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/" createdir="yes" package="jvxi11.rpc" />
+  <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/" createdir="yes" package="jvxi11.rpc" />
   <echo> "rpc generation complete!"</echo>
 </target>
 
 <target name="compile" depends="init">
-  <javac srcdir="src"  destdir="build/classes" >
+  <javac srcdir="src"  destdir="build/classes" includeAntRuntime="yes" >
     <classpath refid="compile.classpath" />
   </javac>
   <echo>compilation complete!</echo>
