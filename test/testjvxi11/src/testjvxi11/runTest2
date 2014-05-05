@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -cp "../../../build/classes:../../../../external/oncrpc.jar:../../../../dist/jvxi11.jar" testjvxi11.Testjvxi11App2
