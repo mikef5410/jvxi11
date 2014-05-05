@@ -65,5 +65,11 @@
   <delete dir="doc/javadoc" />
 </target>
 
+<target name="distclean" depends="clean" >
+  <exec executable="git" >
+    <arg value="clean" />
+    <arg value="-dfx" />
+  </exec>
+</target>
 
 </project>
