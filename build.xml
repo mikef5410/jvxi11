@@ -26,7 +26,7 @@ Ant Build file for jvxi11 ... Java VXI-11 interface library
 <taskdef name="one-jar" classname="com.simontuffs.onejar.ant.OneJarTask" 
          classpath="${one-jar.ant.jar}" onerror="report"/>
 
-<target name="init">
+<target name="init" description="Make output dirs and run jrpcgen on interface files.">
   <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask" classpath="external/jrpcgen.jar" />
   <mkdir dir="build/classes" />
   <mkdir dir="test/build/classes" />
@@ -44,25 +44,25 @@ Ant Build file for jvxi11 ... Java VXI-11 interface library
   <echo>rpc generation complete!</echo>
 </target>
 
-<target name="compile" depends="init" >
+<target name="compile" depends="init" description="Compile the sources.">
   <javac srcdir="src"  destdir="build/classes" includeAntRuntime="no"  classpathref="compile.classpath">
     <!-- <classpath refid="compile.classpath" /> -->
   </javac>
   <echo>compilation complete!</echo>
 </target>
 
-<target name="doc" depends="init" >
+<target name="doc" depends="init" description="Generate Javadocs.">
   <javadoc sourcepath="src" destdir="doc/javadoc" />
 </target>
 
-<target name="jar" depends="compile,doc">
+<target name="jar" depends="compile,doc" description="Make library jar.">
   <jar jarfile="dist/jvxi11.jar" >
     <fileset dir="build/classes" />
     <fileset dir="doc/" includes="javadoc/**" />
   </jar>
 </target>
 
-<target name="test" depends="jar" >
+<target name="test" depends="jar" description="Compile test/example code and make executable jars for each.">
   <!-- Compile the test code -->
   <javac srcdir="test/testjvxi11/src"  destdir="test/build/classes" includeAntRuntime="no" 
          classpathref="test.compile.classpath" />
@@ -97,7 +97,7 @@ Ant Build file for jvxi11 ... Java VXI-11 interface library
 </target>
 
 
-<target name="clean" >
+<target name="clean" description="Clean up." >
   <delete dir="build/classes" />
   <delete dir="test/build/classes" />
   <delete dir="src/jvxi11/rpc" />
@@ -105,7 +105,7 @@ Ant Build file for jvxi11 ... Java VXI-11 interface library
   <delete dir="doc/javadoc" />
 </target>
 
-<target name="distclean" depends="clean" >
+<target name="distclean" depends="clean" description="Remove everything not in git." >
   <exec executable="git" >
     <arg value="clean" />
     <arg value="-dfx" />
