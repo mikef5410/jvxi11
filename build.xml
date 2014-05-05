@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project name="jvxi11" default="init">
+
+<path id="compile.classpath">
+  <fileset dir="external"> 
+    <include name="*.jar"/>
+  </fileset>
+</path>
+
+<target name="init">
+  <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask" classpath="external/jrpcgen.jar" />
+  <mkdir dir="build/classes" />
+  <mkdir dir="dist" />
+  <mkdir dir="src/jvxi11/rpc" />
+  <jrpcgen srcfile="src/jvxi11/vxi11core.rpcl" destdir="src/jvxi11/rpc" createdir="yes" package="jvxi11.rpc" />
+  <jrpcgen srcfile="src/jvxi11/vxi11intr.rpcl" destdir="src/jvxi11/rpc" createdir="yes" package="jvxi11.rpc" />
+  <echo> "rpc generation complete!"</echo>
+</target>
+
+<target name="compile" depends="init">
+  <javac srcdir="src"  destdir="build/classes" >
+    <classpath refid="compile.classpath" />
+  </javac>
+  <echo>compilation complete!</echo>
+</target>
+
+<target name="jar" depends="compile">
+  <jar basedir="build/classes" jarfile="dist/jvxi11.jar" />
+</target>
+
+
+
+</project>
